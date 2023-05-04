@@ -18,9 +18,9 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="lNm-Bw-MbF">
-                                <rect key="frame" x="0.0" y="103" width="393" height="715"/>
+                                <rect key="frame" x="0.0" y="103" width="393" height="749"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="a5i-oA-aTY">
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="a5i-oA-aTY">
                                     <size key="itemSize" width="268" height="336"/>
                                     <size key="headerReferenceSize" width="50" height="50"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
@@ -48,7 +48,7 @@
                                         <size key="customSize" width="340" height="340"/>
                                     </collectionViewCell>
                                 </cells>
-                                <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="headerView" id="G85-Qi-jti">
+                                <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="headerView" id="G85-Qi-jti" customClass="CustomHeader" customModule="AVFoundation_MediaFeed" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="393" height="50"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </collectionReusableView>
@@ -57,10 +57,10 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstAttribute="bottom" secondItem="lNm-Bw-MbF" secondAttribute="bottom" id="BB3-pX-cRk"/>
                             <constraint firstItem="lNm-Bw-MbF" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="FsN-Up-HId"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="lNm-Bw-MbF" secondAttribute="trailing" id="eoa-Ou-o2M"/>
                             <constraint firstItem="lNm-Bw-MbF" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="lxf-VB-3Cb"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="lNm-Bw-MbF" secondAttribute="bottom" id="z35-nK-CDV"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Media Feed" id="wLN-Hc-3bt">
