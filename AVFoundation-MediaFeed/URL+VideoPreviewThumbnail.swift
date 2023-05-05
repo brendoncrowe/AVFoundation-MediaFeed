@@ -12,7 +12,7 @@ import AVFoundation
 
 extension URL {
     
-    public func videoPreviewThumbnail(completion: @escaping(Result<UIImage, Error>) ->()) {
+    public func videoPreviewThumbnail() async throws -> UIImage {
         // create an AVAsset instance
         let asset = AVAsset(url: self) // self refers to the URL instance (e.g mediaObject.videoURL.videoPreviewThumbnail())
         
@@ -26,15 +26,12 @@ extension URL {
         // use CMTime (CoreMedia) to generate the time stamp
         let timestamp = CMTime(seconds: 5, preferredTimescale: 60) // get first second of video
         
-        assetGenerator.generateCGImageAsynchronously(for: timestamp) { cgImage, _, error in
-            if let error = error {
-                print("There was an error generating the photo")
-                completion(.failure(error))
-            }
-            if let cgImage = cgImage {
-                let image = UIImage(cgImage: cgImage)
-                completion(.success(image))
-            }
+        do {
+            let (image, _) = try await assetGenerator.image(at: timestamp)
+            let thumbnailImage = UIImage(cgImage: image)
+            return thumbnailImage
+        } catch {
+            throw error
         }
     }
 }

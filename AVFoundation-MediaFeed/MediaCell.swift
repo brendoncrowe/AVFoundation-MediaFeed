@@ -15,16 +15,10 @@ class MediaCell: UICollectionViewCell {
         if let imageData = mediaObject.imageData {
             mediaImageView.image = UIImage(data: imageData)
         }
-        if let videoURL = mediaObject.videoURL {
-            videoURL.videoPreviewThumbnail { [weak self] result in
-                switch result {
-                case .failure(let error):
-                    print("error creating thumbnail image: \(error)")
-                case .success(let image):
-                    DispatchQueue.main.async {
-                        self?.mediaImageView.image = image
-                    }
-                }
+        Task {
+            if let videoURL = mediaObject.videoURL {
+                let image = try await videoURL.videoPreviewThumbnail()
+                mediaImageView.image = image
             }
         }
     }
