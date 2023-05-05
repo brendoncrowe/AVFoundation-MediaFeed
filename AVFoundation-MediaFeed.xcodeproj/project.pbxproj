@@ -17,6 +17,7 @@
 		40A7FA262A046E7C003D67AE /* CustomHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40A7FA252A046E7C003D67AE /* CustomHeader.swift */; };
 		40A7FA282A046E9F003D67AE /* MediaCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40A7FA272A046E9F003D67AE /* MediaCell.swift */; };
 		40A7FA2A2A047225003D67AE /* MediaObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40A7FA292A047225003D67AE /* MediaObject.swift */; };
+		40A7FA2C2A0594B5003D67AE /* URL+VideoPreviewThumbnail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40A7FA2B2A0594B5003D67AE /* URL+VideoPreviewThumbnail.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		40A7FA252A046E7C003D67AE /* CustomHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomHeader.swift; sourceTree = "<group>"; };
 		40A7FA272A046E9F003D67AE /* MediaCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaCell.swift; sourceTree = "<group>"; };
 		40A7FA292A047225003D67AE /* MediaObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaObject.swift; sourceTree = "<group>"; };
+		40A7FA2B2A0594B5003D67AE /* URL+VideoPreviewThumbnail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+VideoPreviewThumbnail.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +70,7 @@
 				4037F79C2A044118005D9C6F /* SceneDelegate.swift */,
 				4037F79E2A044118005D9C6F /* MediaFeedViewController.swift */,
 				40A7FA252A046E7C003D67AE /* CustomHeader.swift */,
+				40A7FA2B2A0594B5003D67AE /* URL+VideoPreviewThumbnail.swift */,
 				40A7FA292A047225003D67AE /* MediaObject.swift */,
 				40A7FA272A046E9F003D67AE /* MediaCell.swift */,
 				4037F7A02A044118005D9C6F /* Main.storyboard */,
@@ -155,6 +158,7 @@
 				40A7FA2A2A047225003D67AE /* MediaObject.swift in Sources */,
 				4037F79F2A044118005D9C6F /* MediaFeedViewController.swift in Sources */,
 				4037F79B2A044118005D9C6F /* AppDelegate.swift in Sources */,
+				40A7FA2C2A0594B5003D67AE /* URL+VideoPreviewThumbnail.swift in Sources */,
 				4037F79D2A044118005D9C6F /* SceneDelegate.swift in Sources */,
 				40A7FA262A046E7C003D67AE /* CustomHeader.swift in Sources */,
 			);

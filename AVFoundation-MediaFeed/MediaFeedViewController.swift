@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import AVKit // contains AVPLayerViewController for video playback
+import AVFoundation // video playback is done on a CALayer, which all views are backed by
 
 class MediaFeedViewController: UIViewController {
     
@@ -54,6 +56,7 @@ class MediaFeedViewController: UIViewController {
     }
 }
 
+// MARK: CollectionView Delegates
 extension MediaFeedViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -61,8 +64,11 @@ extension MediaFeedViewController: UICollectionViewDelegateFlowLayout, UICollect
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath)
-        cell.backgroundColor = .systemGreen.withAlphaComponent(0.6)
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as? MediaCell else {
+            fatalError("could not dequeue a MediaCell")
+        }
+        let mediaObject = mediaObjects[indexPath.row]
+        cell.configureCell(for: mediaObject)
         return cell
     }
     
@@ -81,6 +87,18 @@ extension MediaFeedViewController: UICollectionViewDelegateFlowLayout, UICollect
             fatalError("could not load the header")
         }
         return header
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let mediaObject = mediaObjects[indexPath.row]
+        guard let videoURL = mediaObject.videoURL else { return }
+        let playerController = AVPlayerViewController() // comes from AVKit
+        let player = AVPlayer(url: videoURL)
+        playerController.player = player
+        present(playerController, animated: true) {
+            // play video automatically
+            player.play()
+        }
     }
 }
 
@@ -104,7 +122,10 @@ extension MediaFeedViewController: UINavigationControllerDelegate, UIImagePicker
                 mediaObjects.append(mediaObject)
             }
         case movie:
-            break
+            if let videoURL = info[UIImagePickerController.InfoKey.mediaURL] as? URL {
+                let mediaObject = MediaObject(imageData: nil, videoURL: videoURL, caption: nil)
+                mediaObjects.append(mediaObject)
+            }
         default:
             print("unsupported media type")
         }
