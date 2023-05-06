@@ -8,7 +8,9 @@
 import UIKit
 import AVFoundation
 
-// ** may want to refactor the below extension so as to not be using a completion handler. i.e simplify
+enum URLError: String, Error {
+    case imageError = "Could not create a thumbnail image"
+}
 
 extension URL {
     
@@ -24,15 +26,14 @@ extension URL {
         
         // create a timestamp of the desired image frame in the video
         // use CMTime (CoreMedia) to generate the time stamp
-        let timestamp = CMTime(seconds: 5, preferredTimescale: 60) // get first second of video
+        let timestamp = CMTime(seconds: 3, preferredTimescale: 60) // get first second of video
         
         do {
             let (image, _) = try await assetGenerator.image(at: timestamp)
             let thumbnailImage = UIImage(cgImage: image)
             return thumbnailImage
         } catch {
-            throw error
+            throw URLError.imageError
         }
     }
 }
-

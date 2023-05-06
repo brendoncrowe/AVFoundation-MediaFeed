@@ -15,7 +15,7 @@ class MediaCell: UICollectionViewCell {
         if let imageData = mediaObject.imageData {
             mediaImageView.image = UIImage(data: imageData)
         }
-        Task {
+        Task { // Task is called in a non-asynchronous environment
             if let videoURL = mediaObject.videoURL {
                 let image = try await videoURL.videoPreviewThumbnail()
                 mediaImageView.image = image
