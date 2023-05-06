@@ -127,9 +127,9 @@ extension MediaFeedViewController: UINavigationControllerDelegate, UIImagePicker
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
         // info dictionary keys
-        // InfoKey.originalImage - UIImage
+        // InfoKey.originalImage - UIImage contains the image data 
         // InfoKey.mediaType - String
-        // InfoKey.mediaURL - URL
+        // InfoKey.mediaURL - URL that contains the path to the video
         let image = "public.image"
         let movie = "public.movie"
         
