@@ -18,23 +18,27 @@ class CoreDataManager {
     // get access to the NSManagedObjectContext from AppDelegate
     private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
-    public func createMediaObject(_ imageData: Data, _ videoURL: URL?) {
-        let mediaObject = CDMediaObject(entity: CDMediaObject.entity(), insertInto: context)
-        mediaObject.createdDate = Date()
-        mediaObject.id = UUID().uuidString
-        mediaObject.imageData = imageData
-        if let videoURL = videoURL {
-            do {
-                mediaObject.videoData = try Data(contentsOf: videoURL)
-            } catch {
-                print("error converting url to data: \(error.localizedDescription)")
-            }
-        }
+    func createMediaObject(_ imageData: Data, videoURL: URL?) -> CDMediaObject {
+      let mediaObject = CDMediaObject(entity: CDMediaObject.entity(), insertInto: context)
+      mediaObject.createdDate = Date() // current date
+      mediaObject.id = UUID().uuidString // unique string
+      mediaObject.imageData = imageData // both video and image objects has an image
+      if let videoURL = videoURL { // if exist, this means it's a video object
+        // convert a URL to Data
         do {
-            try context.save()
+          mediaObject.videoData = try Data(contentsOf: videoURL)
         } catch {
-            print("there was an error creating an object: \(error.localizedDescription)")
+          print("failed to convert URL to Data with error: \(error)")
         }
+      }
+      
+      // save the newly created mediaObject entity instance to the NSManagedObjectContext
+      do {
+        try context.save()
+      } catch {
+        print("failed to save newly created media object with error: \(error)")
+      }
+      return mediaObject
     }
     
     public func fetchMediaObjects() -> [CDMediaObject] {

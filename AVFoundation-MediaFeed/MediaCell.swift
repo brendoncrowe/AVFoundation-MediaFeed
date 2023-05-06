@@ -11,12 +11,12 @@ class MediaCell: UICollectionViewCell {
     
     @IBOutlet weak var mediaImageView: UIImageView!
     
-    public func configureCell(for mediaObject: MediaObject) {
+    public func configureCell(for mediaObject: CDMediaObject) {
         if let imageData = mediaObject.imageData {
             mediaImageView.image = UIImage(data: imageData)
         }
         Task { // Task is called in a non-asynchronous environment
-            if let videoURL = mediaObject.videoURL {
+            if let videoURL = mediaObject.videoData?.convertToURL() {
                 let image = try await videoURL.videoPreviewThumbnail()
                 mediaImageView.image = image
             }

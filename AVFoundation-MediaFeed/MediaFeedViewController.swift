@@ -26,7 +26,7 @@ class MediaFeedViewController: UIViewController {
         return pickerController
     }()
     
-    private var mediaObjects = [MediaObject]() {
+    private var mediaObjects = [CDMediaObject]() {
         didSet {
             collectionView.reloadData()
         }
@@ -36,9 +36,14 @@ class MediaFeedViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         configureCV()
+        fetchMediaObjects()
         if !UIImagePickerController.isSourceTypeAvailable(.camera) {
             videoButton.isEnabled = false
         }
+    }
+    
+    private func fetchMediaObjects() {
+        mediaObjects = CoreDataManager.shared.fetchMediaObjects()
     }
     
     private func configureCV() {
@@ -58,10 +63,11 @@ class MediaFeedViewController: UIViewController {
     
     private func playRandomVideo(in view: UIView) {
         // all non-nil media objects are needed
-        let videoURLs = mediaObjects.compactMap { $0.videoURL }
+        let videoDataObjects = mediaObjects.compactMap { $0.videoData }
         // get a random video playing
-        if let videoURl = videoURLs.randomElement() {
-            let player = AVPlayer(url: videoURl)
+        if let videoObject = videoDataObjects.randomElement(),
+           let videoURL = videoObject.convertToURL() {
+            let player = AVPlayer(url: videoURL)
             // create a CALayer
             let playerLayer = AVPlayerLayer(player: player)
             // set the layer's frame
@@ -111,7 +117,7 @@ extension MediaFeedViewController: UICollectionViewDelegateFlowLayout, UICollect
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let mediaObject = mediaObjects[indexPath.row]
-        guard let videoURL = mediaObject.videoURL else { return }
+        guard let videoURL = mediaObject.videoData?.convertToURL() else { return }
         let playerController = AVPlayerViewController() // comes from AVKit
         let player = AVPlayer(url: videoURL)
         playerController.player = player
@@ -125,31 +131,33 @@ extension MediaFeedViewController: UICollectionViewDelegateFlowLayout, UICollect
 extension MediaFeedViewController: UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        
         // info dictionary keys
-        // InfoKey.originalImage - UIImage contains the image data 
+        // InfoKey.originalImage - UIImage contains the image data
         // InfoKey.mediaType - String
         // InfoKey.mediaURL - URL that contains the path to the video
         let image = "public.image"
         let movie = "public.movie"
         
         guard let mediaType = info[UIImagePickerController.InfoKey.mediaType] as? String else { return }
-        
         switch mediaType {
         case image:
             if let originalImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage, let imageData = originalImage.jpegData(compressionQuality: 1.0) {
-                let mediaObject = MediaObject(imageData: imageData, videoURL: nil, caption: nil)
+                let mediaObject = CoreDataManager.shared.createMediaObject(imageData, videoURL: nil)
                 mediaObjects.append(mediaObject)
             }
         case movie:
-            if let videoURL = info[UIImagePickerController.InfoKey.mediaURL] as? URL {
-                let mediaObject = MediaObject(imageData: nil, videoURL: videoURL, caption: nil)
-                mediaObjects.append(mediaObject)
+            if let mediaURL = info[UIImagePickerController.InfoKey.mediaURL] as? URL {
+                Task {
+                    let image = try await mediaURL.videoPreviewThumbnail()
+                    if let imageData = image.jpegData(compressionQuality: 1.0) {
+                        let mediaObject = CoreDataManager.shared.createMediaObject(imageData, videoURL: mediaURL)
+                        mediaObjects.append(mediaObject)
+                    }
+                }
             }
         default:
             print("unsupported media type")
         }
-        print("mediaType: \(mediaType)")
         picker.dismiss(animated: true)
     }
 }
